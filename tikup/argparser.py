@@ -8,6 +8,9 @@ def parse_args():
         "--no-delete", action="store_false", help="don't delete files when done"
     )
     parser.add_argument(
+        "--no-upload", action="store_false", help="don't upload files to internetarchive when done"
+    )
+    parser.add_argument(
         "--hashtag", action="store_true", help="download hashtag instead of username"
     )
     parser.add_argument(

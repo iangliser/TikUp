@@ -11,7 +11,7 @@ Install with `pip install tikup`.
 
 **How to Use**
 ```
-usage: tikup.py [-h] [--no-delete] [--hashtag] [--limit LIMIT]
+usage: tikup.py [-h] [--no-delete] [--no-upload] [--hashtag] [--limit LIMIT]
                 [--use-download-archive] [--id] [--liked] [--sort]
                 user
 
@@ -23,6 +23,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --no-delete           don't delete files when done
+  --no-upload           don't upload files to internetarchive when done
   --hashtag             download hashtag instead of username
   --limit LIMIT         set limit on amount of TikToks to download
   --use-download-archive

@@ -243,7 +243,8 @@ def main():
         downloadType = 'username'
         tiktoks = getUsernameVideos(username, limit)
     tiktoks = downloadTikToks(username, tiktoks, file, downloadType, did)
-    uploadTikToks(tiktoks, file, delete)
+    if args.no_upload:  # Upload to IA
+        uploadTikToks(tiktoks, file, delete)
 
     try:
         file.close()
