@@ -9,7 +9,7 @@ import youtube_dl
 from internetarchive import get_item, upload
 from TikTokApi import TikTokApi
 #Make sure to change to 'from .argparser import parse_args' when uploading
-from .argparser import parse_args
+from argparser import parse_args
 
 
 api = TikTokApi()
@@ -74,7 +74,7 @@ def downloadTikTok(username, tiktok, cwd, varTry, did):
             ydl.download(['https://www.tiktok.com/@' + username + '/video/' + tiktokID])
     else:
         mp4 = open(tiktokID + '.mp4', "wb")
-        mp4.write(api.get_Video_By_DownloadURL(tiktok['itemInfo']['itemStruct']['video']['downloadAddr'], custom_did=did))
+        mp4.write(api.get_Video_By_DownloadURL(tiktok['video']['downloadAddr'], custom_did=did))
         mp4.close()
         #shutil.rmtree('tmp')
     try:
@@ -158,30 +158,24 @@ def downloadTikToks(username, tiktoks, file, downloadType, did):
         lines = ''
     ids = []
     for tiktok in tiktoks:
-        if str(type(tiktok)) == '<class \'dict\'>':
-            try:
-                tiktok = tiktok['id']
-            except KeyError:
-                tiktok = tiktok['itemInfos']['id']
-        if file is not None and doesIdExist(lines, tiktok):
-            print(tiktok + " has already been archived.")
+        if file is not None and doesIdExist(lines, tiktok['id']):
+            print(tiktok['id'] + " has already been archived.")
         else:
-            tiktokObj = getTikTokObject(tiktok, did)
-            username = getUsername(tiktok)
+            username = tiktok['author']['uniqueId']
             if username is None:
-                print(tiktok + ' has been deleted or is private')
-                ids.append(tiktok)
+                print(tiktok['id'] + ' has been deleted or is private')
+                ids.append(tiktok['id'])
             else:
-                downloadTikTok(username, tiktokObj, cwd, 1, did)
+                downloadTikTok(username, tiktok, cwd, 1, did)
                 i = 1
-                while not os.path.exists(tiktok + '/' + tiktok + '.mp4'):
+                while not os.path.exists(tiktok['id'] + '/' + tiktok['id'] + '.mp4'):
                     tiktokObj = getTikTokObject(tiktok, did)
-                    username = getUsername(tiktok)
+                    username = tiktokObj['itemInfo']['itemStruct']['author']['uniqueId']
                     time.sleep(1)
-                    downloadTikTok(username, tiktokObj, cwd, i, did)
+                    downloadTikTok(username, tiktokObj['itemInfo']['itemStruct'], cwd, i, did)
                     i += 1
-                print(tiktok + ' has been downloaded')
-                ids.append(tiktok)
+                print(tiktok['id'] + ' has been downloaded')
+                ids.append(tiktok['id'])
     return ids
 
 
